@@ -6,6 +6,7 @@
 #include<thread>
 #include<vector>
 #include"Win32Definition.h"
+#include"CatoolPlotTool\Singleton.h"
 
 namespace catool
 {
@@ -34,6 +35,7 @@ namespace catool
 		{
 			HWND raw_handle;
 			std::atomic_bool quit;
+			FormWin32(const FormWin32Initial& init);
 			~FormWin32();
 		};
 		
@@ -62,7 +64,7 @@ namespace catool
 			HRESULT create_window(const FormWin32Initial& wi,FormWin32* ptr)
 			{
 				HINSTANCE g_instance = GetModuleHandle(NULL);//µÃµ½³ÌÐòÊµÀý¾ä±ú
-				LPCWSTR g_name = T("Hello Win");
+				LPCWSTR g_name = NTS("Hello Win");
 
 				WNDCLASSEX wnd;
 				wnd.cbClsExtra = 0;
@@ -80,7 +82,7 @@ namespace catool
 				//×¢²á´°¿ÚÀà
 				if (!RegisterClassEx(&wnd))
 				{
-					MessageBox(NULL, T("×¢²á´°¿ÚÊ§°Ü£¡"), T("Hello Win"), 0);
+					MessageBox(NULL, NTS("×¢²á´°¿ÚÊ§°Ü£¡"), NTS("Hello Win"), 0);
 					return false;
 				}
 

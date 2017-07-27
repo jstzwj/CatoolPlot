@@ -29,5 +29,14 @@
     <ClInclude Include="..\include\CatoolPlotForm\win32\Win32Definition.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\CatoolPlotForm\form.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CatoolPlotForm\dx11\Dx11Form.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CatoolPlotTool\Singleton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

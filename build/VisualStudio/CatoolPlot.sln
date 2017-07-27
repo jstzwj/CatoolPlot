@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CatoolPlotTest", "..\..\test\CatoolPlotTest.vcxproj", "{747E511C-EE40-4C3F-BF82-30EC4C8B614E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CatoolPlot", "..\..\demo\CatoolPlot\CatoolPlot.vcxproj", "{2154435D-49D6-43E2-94A1-95611F090D44}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CatoolPlot", "..\..\demo\CatoolPlot.vcxproj", "{2154435D-49D6-43E2-94A1-95611F090D44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

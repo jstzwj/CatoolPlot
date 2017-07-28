@@ -21,6 +21,9 @@
     <ClCompile Include="..\include\CatoolPlotForm\win32\Win32Form.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\include\CatoolPlotForm\dx11\Dx11Form.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CatoolPlotForm\win32\Win32Form.h">
@@ -36,6 +39,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\include\CatoolPlotTool\Singleton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CatoolPlotRender\RenderDx11.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

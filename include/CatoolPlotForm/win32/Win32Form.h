@@ -4,6 +4,8 @@
 #include<mutex>
 #include<condition_variable>
 #include<thread>
+#include<functional>
+#include<future>
 #include<vector>
 #include"Win32Definition.h"
 #include"CatoolPlotTool\Singleton.h"
@@ -15,6 +17,8 @@ namespace catool
 
 
 		LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wPararm, LPARAM lParam);
+		class FormWin32EventThread;
+		struct FormWin32;
 
 		struct FormWin32Style
 		{
@@ -31,85 +35,57 @@ namespace catool
 			int height = 768;
 			FormWin32Style style = FormWin32Style();
 		};
-		struct FormWin32
-		{
-			HWND raw_handle;
-			std::atomic_bool quit;
-			FormWin32(const FormWin32Initial& init);
-			~FormWin32();
-		};
+		
 		
 		class FormWin32EventThread
 		{
 		private:
-
-		public:
+			std::thread event_thread;
+			std::function<void(void)> delegate_function;
+			
 			void main_thread()
 			{
+				while (delegate_function)
+				{
+					delegate_function();
+					delegate_function = std::function<void()>{};
+				}
+
 				MSG msg;
-				ZeroMemory(&msg, sizeof(MSG));
-				while (msg.message != WM_QUIT)
+				//ZeroMemory(&msg, sizeof(MSG));
+				while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 				{
-					if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-					{
-						TranslateMessage(&msg);
-						DispatchMessage(&msg);
-					}
-					else
-					{
-						//DoSomething
-					}
+					//TranslateMessage(&msg);
+					DispatchMessage(&msg);
 				}
 			}
-			HRESULT create_window(const FormWin32Initial& wi,FormWin32* ptr)
+			
+		public:
+			HRESULT create(FormWin32& form)
 			{
-				HINSTANCE g_instance = GetModuleHandle(NULL);//得到程序实例句柄
-				LPCWSTR g_name = NTS("Hello Win");
+				event_thread = std::thread([&] {this->main_thread(); });
 
-				WNDCLASSEX wnd;
-				wnd.cbClsExtra = 0;
-				wnd.cbSize = sizeof(WNDCLASSEX);
-				wnd.cbWndExtra = 0;
-				wnd.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-				wnd.hCursor = LoadCursor(NULL, IDC_ARROW);
-				wnd.hIcon = LoadIcon(NULL, IDI_WINLOGO);
-				wnd.hIconSm = wnd.hIcon;
-				wnd.hInstance = g_instance;
-				wnd.lpfnWndProc = WndProc;
-				wnd.lpszClassName = g_name;
-				wnd.lpszMenuName = g_name;
-				wnd.style = CS_HREDRAW | CS_VREDRAW;
-				//注册窗口类
-				if (!RegisterClassEx(&wnd))
+				std::promise<HRESULT> pro;
+				std::future<HRESULT> fur = pro.get_future();
+				delegate_function = [&]()
 				{
-					MessageBox(NULL, NTS("注册窗口失败！"), NTS("Hello Win"), 0);
-					return false;
-				}
-
-				//创建窗口
-				HWND g_hwnd = CreateWindowEx(WS_EX_APPWINDOW, g_name, g_name, WS_OVERLAPPEDWINDOW, 300, 200,
-					800, 600, NULL, NULL, g_instance, NULL);
-
-				//显示窗口设置其为焦点
-				ShowWindow(g_hwnd, SW_SHOW);
-				SetForegroundWindow(g_hwnd);
-				SetFocus(g_hwnd);
-
-				//隐藏鼠标
-				//SetCursor(false);
-
-				main_thread();
-
-				return true;
+					pro.set_value(form.create_window());
+				};
+				fur.wait();
+				return fur.get();
 			}
-			void destory_window(HWND& handle)
-			{
-				SetWindowLongPtrW(handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(nullptr));
-				DestroyWindow(handle);
-				handle = nullptr;
-			}
+		};
 
+		struct FormWin32
+		{
+			HWND raw_handle;
+			FormWin32Initial form_win32_initial;
+			std::atomic_bool quit;
 
+			FormWin32(const FormWin32Initial& init = FormWin32Initial());
+			~FormWin32();
+			virtual HRESULT create_window();
+			virtual void destory_window();
 		};
 		
 	}

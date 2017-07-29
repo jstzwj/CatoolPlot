@@ -120,19 +120,19 @@ namespace catool
 				g_pd3dDevice->Release();
 		}
 
-		virtual HRESULT FormDx11::create_window()
+		HRESULT FormDx11::create_window()
 		{
 			FormWin32::create_window();
 			if (FAILED(InitDevice()))
 			{
 				CleanupDevice();
-				return;
+				return S_FALSE;
 			}
 			CleanupDevice();
 			return S_OK;
 		}
 
-		virtual void FormDx11::destory_window()
+		void FormDx11::destory_window()
 		{
 			FormWin32::destory_window();
 		}

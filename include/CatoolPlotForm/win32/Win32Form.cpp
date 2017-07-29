@@ -51,13 +51,13 @@ namespace catool
 			}
 
 			//创建窗口
-			HWND g_hwnd = CreateWindowEx(WS_EX_APPWINDOW, g_name, g_name, WS_OVERLAPPEDWINDOW, 300, 200,
+			raw_handle = CreateWindowEx(WS_EX_APPWINDOW, g_name, g_name, WS_OVERLAPPEDWINDOW, 300, 200,
 				800, 600, NULL, NULL, g_instance, NULL);
 
 			//显示窗口设置其为焦点
-			ShowWindow(g_hwnd, SW_SHOW);
-			SetForegroundWindow(g_hwnd);
-			SetFocus(g_hwnd);
+			ShowWindow(raw_handle, SW_SHOW);
+			SetForegroundWindow(raw_handle);
+			SetFocus(raw_handle);
 
 			//隐藏鼠标
 			//SetCursor(false);
@@ -75,6 +75,10 @@ namespace catool
 			SetWindowLongPtrW(raw_handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(nullptr));
 			DestroyWindow(raw_handle);
 			raw_handle = nullptr;
+		}
+		void FormWin32::message_process()
+		{
+
 		}
 	}
 }

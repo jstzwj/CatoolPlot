@@ -36,6 +36,21 @@ namespace catool
 			FormWin32Style style = FormWin32Style();
 		};
 		
+
+		struct FormWin32
+		{
+			HWND raw_handle;
+			FormWin32Initial form_win32_initial;
+			std::atomic_bool quit;
+
+			FormWin32(const FormWin32Initial& init = FormWin32Initial());
+			~FormWin32();
+			virtual HRESULT create_window();
+			virtual void destory_window();
+			virtual void message_process();
+		};
+
+
 		
 		class FormWin32EventThread
 		{
@@ -76,17 +91,7 @@ namespace catool
 			}
 		};
 
-		struct FormWin32
-		{
-			HWND raw_handle;
-			FormWin32Initial form_win32_initial;
-			std::atomic_bool quit;
-
-			FormWin32(const FormWin32Initial& init = FormWin32Initial());
-			~FormWin32();
-			virtual HRESULT create_window();
-			virtual void destory_window();
-		};
+		
 		
 	}
 }

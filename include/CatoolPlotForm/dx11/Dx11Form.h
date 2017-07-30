@@ -37,6 +37,7 @@ namespace catool
 			void CleanupDevice();
 			virtual HRESULT create_window();
 			virtual void destory_window();
+			virtual void message_process();
 			void Render()
 			{
 				float ClearColor[4] = { 0.5f, 0.1f, 0.2f, 1.0f }; //red,green,blue,alpha

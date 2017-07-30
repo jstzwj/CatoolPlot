@@ -7,7 +7,9 @@ int main()
 {
 	catool::dx11::FormDx11Initial form_initial;
 	catool::dx11::FormDx11 form(form_initial);
-	form.create_window();
-	
+	catool::win32::FormWin32EventThread event_thread(form);
+	event_thread.run();
+	event_thread.wait();
+
 	return 0;
 }

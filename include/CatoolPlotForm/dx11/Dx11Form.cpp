@@ -128,13 +128,35 @@ namespace catool
 				CleanupDevice();
 				return S_FALSE;
 			}
-			CleanupDevice();
+			
 			return S_OK;
 		}
 
 		void FormDx11::destory_window()
 		{
+			CleanupDevice();
 			FormWin32::destory_window();
+		}
+
+		void FormDx11::message_process()
+		{
+			//FormWin32::message_process();
+			MSG msg;
+			ZeroMemory(&msg, sizeof(MSG));
+			while (msg.message != WM_QUIT)
+			{
+				if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+				{
+					TranslateMessage(&msg);
+					DispatchMessage(&msg);
+				}
+				else
+				{
+					float ClearColor[4] = { 0.5f, 0.1f, 0.2f, 1.0f }; //red,green,blue,alpha
+					g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
+					g_pSwapChain->Present(0, 0);
+				}
+			}
 		}
 
 	}

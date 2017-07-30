@@ -57,37 +57,27 @@ namespace catool
 		private:
 			std::thread event_thread;
 			std::function<void(void)> delegate_function;
-			
-			void main_thread()
-			{
-				while (delegate_function)
-				{
-					delegate_function();
-					delegate_function = std::function<void()>{};
-				}
-
-				MSG msg;
-				//ZeroMemory(&msg, sizeof(MSG));
-				while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-				{
-					//TranslateMessage(&msg);
-					DispatchMessage(&msg);
-				}
-			}
-			
+			FormWin32& form;
 		public:
-			HRESULT create(FormWin32& form)
-			{
-				event_thread = std::thread([&] {this->main_thread(); });
 
+			FormWin32EventThread(FormWin32& form)
+				:form(form){}
+			HRESULT run()
+			{
 				std::promise<HRESULT> pro;
 				std::future<HRESULT> fur = pro.get_future();
-				delegate_function = [&]()
-				{
+				event_thread = std::thread([&] {
 					pro.set_value(form.create_window());
-				};
+					form.message_process();
+					form.destory_window();
+				});
+
 				fur.wait();
 				return fur.get();
+			}
+			void wait()
+			{
+				event_thread.join();
 			}
 		};
 
